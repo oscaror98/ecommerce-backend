@@ -3,15 +3,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from sqlalchemy import text
 
+from app.api.routes.auth import router as auth_router
 from app.core.database import engine
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """
-    Startup and shutdown events.
-    """
-
     try:
         with engine.connect() as connection:
             connection.execute(text("SELECT 1"))
@@ -31,6 +28,8 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+app.include_router(auth_router)
 
 
 @app.get("/")
