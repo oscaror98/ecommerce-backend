@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy import String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base_model import BaseModel
 
@@ -26,4 +26,9 @@ class Category(BaseModel):
     description: Mapped[str | None] = mapped_column(
         String(255),
         nullable=True,
+    )
+
+    products = relationship(
+        "Product",
+        back_populates="category",
     )
