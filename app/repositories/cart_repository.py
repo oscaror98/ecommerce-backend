@@ -22,3 +22,9 @@ class CartRepository:
         self.db.commit()
         self.db.refresh(cart)
         return cart
+
+    def clear_cart(self, cart):
+        for item in cart.items:
+            self.db.delete(item)
+
+        self.db.flush()

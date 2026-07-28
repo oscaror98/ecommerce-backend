@@ -99,3 +99,21 @@ class CartService:
         )
 
         return self.cart_item_repository.create(item)
+
+    def remove_item(
+        self,
+        user: User,
+        product_id,
+    ):
+
+        cart = self.get_or_create_cart(user)
+
+        item = self.cart_item_repository.get_item(
+            cart.id,
+            product_id,
+        )
+
+        if item is None:
+            raise ValueError("Product not found in cart")
+
+        self.cart_item_repository.delete(item)

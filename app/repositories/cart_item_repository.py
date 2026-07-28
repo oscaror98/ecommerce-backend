@@ -35,3 +35,7 @@ class CartItemRepository:
         self.db.commit()
         self.db.refresh(item)
         return item
+
+    def delete(self, item: CartItem) -> None:
+        self.db.delete(item)
+        self.db.commit()
