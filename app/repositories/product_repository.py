@@ -56,3 +56,6 @@ class ProductRepository:
     def delete(self, product: Product) -> None:
         self.db.delete(product)
         self.db.commit()
+
+    def get_by_id(self, product_id: UUID) -> Product | None:
+        return self.db.get(Product, product_id)

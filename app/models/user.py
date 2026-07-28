@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy import Boolean, String
 from sqlalchemy.dialects.postgresql import UUID
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.models.base_model import BaseModel
 
@@ -48,4 +48,10 @@ class User(BaseModel):
         Boolean,
         default=True,
         nullable=False,
+    )
+
+    cart = relationship(
+        "Cart",
+        back_populates="user",
+        uselist=False,
     )
