@@ -23,7 +23,7 @@ def get_my_cart(
     current_user: User = Depends(get_current_user),
 ):
     service = CartService(db)
-    return service.get_or_create_cart(current_user)
+    return service.get_cart(current_user)
 
 
 @router.post(

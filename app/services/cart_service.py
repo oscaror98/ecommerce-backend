@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from sqlalchemy.orm import Session
 
 from app.models.cart import Cart
@@ -6,6 +8,7 @@ from app.models.user import User
 from app.repositories.cart_item_repository import CartItemRepository
 from app.repositories.cart_repository import CartRepository
 from app.repositories.product_repository import ProductRepository
+from app.schemas.cart import CartItemDetail, CartResponse
 from app.schemas.cart_item import CartItemCreate
 
 
@@ -26,6 +29,36 @@ class CartService:
         cart = Cart(user_id=user.id)
 
         return self.cart_repository.create(cart)
+
+    def get_cart(self, user: User) -> CartResponse:
+
+        cart = self.get_or_create_cart(user)
+
+        items = []
+        total = Decimal("0.00")
+
+        for item in cart.items:
+
+            subtotal = item.product.price * item.quantity
+
+            total += subtotal
+
+            items.append(
+                CartItemDetail(
+                    product_id=item.product.id,
+                    name=item.product.name,
+                    price=item.product.price,
+                    quantity=item.quantity,
+                    subtotal=subtotal,
+                )
+            )
+
+        return CartResponse(
+            id=cart.id,
+            user_id=cart.user_id,
+            items=items,
+            total=total,
+        )
 
     def add_item(
         self,
